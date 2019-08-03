@@ -174,16 +174,25 @@ gr.insert_edge(c,d,7)
 def MST_Kruskal(G):
     A = []
     ds= DisjointSet()
+    set_list = []
     for vertex in G.vertices():
-        ds.Make_Set(vertex)
+        new_set = ds.Make_Set(vertex)
+        set_list.append(new_set)
     edges = list(G.edges())
     sorted_edges = sorted(edges,key = lambda x: x._element)
     for edge in sorted_edges:
         u = edge._origin
         v = edge._destination
+        u_set = None
+        v_set = None
+        for element in set_list:
+            if element.head.info._element == u._element:
+                u_set = element
+            if element.head.info._element == v._element:
+                v_set = element 
         if ds.Find_Set(u) != ds.Find_Set(v):
             A.append(edge)
-            ds.Union(u,v)
+            ds.Union(u_set,v_set)
     return A   
 
 MST_Kruskal(gr)
