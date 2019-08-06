@@ -112,6 +112,9 @@ class Min_Heap:
         return vertex
     
     def delete_heap(self):
+        if len(self.TREE) == 2:         # Base condition if only 1 element left in heap just remove it from heap and self.TREE array and return it
+            elem = self.TREE.pop(-1)
+            return elem
         item = self.TREE[1] 
         last = self.TREE.pop(-1)
         self.TREE[1] = last
