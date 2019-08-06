@@ -112,8 +112,9 @@ class Min_Heap:
         return vertex
     
     def delete_heap(self):
-        item = self.TREE[1]
+        item = self.TREE[1] 
         last = self.TREE.pop(-1)
+        self.TREE[1] = last
         size = len(self.TREE[1:])
         ptr = 1
         left = 2 
@@ -123,16 +124,21 @@ class Min_Heap:
                 self.TREE[ptr] = last
                 return item
             if self.TREE[left]._key <= self.TREE[right]._key:
+                temp = self.TREE[ptr]
                 self.TREE[ptr] = self.TREE[left]
+                self.TREE[left] = temp
                 ptr= left
             else:
+                temp = self.TREE[ptr]
                 self.TREE[ptr] = self.TREE[right]
+                self.TREE[right] = temp
                 ptr = right
             left = 2*ptr
             right = 2*ptr + 1
         if left == size and last._key > self.TREE[left]._key:
-            ptr = left
-            self.TREE[ptr] = last
+            temp = self.TREE[left]
+            self.TREE[left] = last
+            self.TREE[ptr] = temp
         return item
     
     def is_Empty(self):
@@ -144,11 +150,12 @@ class Min_Heap:
     def Decrease_Key(self,v):
         i = self.TREE.index(v)
         par = math.floor(i/2)
-        while i > 1 and self.TREE[par]._key > self.TREE[i]._key:
+        while i > 1 and self.TREE[par]._key >= self.TREE[i]._key:
             temp = self.TREE[i]
             self.TREE[i] = self.TREE[par]
             self.TREE[par] = temp
-            i = par
+            i = math.floor(i/2)
+            par = math.floor(i/2)
 
 def MST_Prims(G,root):
     heap = Min_Heap()
@@ -165,6 +172,7 @@ def MST_Prims(G,root):
         u = heap.delete_heap()
         for v in adj_map[u]:
             if v in heap_arr and adj_map[u][v]._element < v._key:
+                print('Edge is  :',adj_map[u][v]._element)
                 v._parent = u
                 v._key = adj_map[u][v]._element
                 heap.Decrease_Key(v)
@@ -188,7 +196,7 @@ gr.insert_edge(b,c,8)
 gr.insert_edge(h,i,7)
 gr.insert_edge(h,g,1)
 gr.insert_edge(i,g,6)
-gr.insert_edge(i,c,6)
+gr.insert_edge(i,c,2)
 gr.insert_edge(c,f,4)
 gr.insert_edge(g,f,2)
 gr.insert_edge(d,f,14)
